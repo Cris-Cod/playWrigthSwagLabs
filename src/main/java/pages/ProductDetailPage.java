@@ -11,7 +11,8 @@ public class ProductDetailPage {
     }
 
     String titleProductDatail = "//div[@data-test='inventory-item-name']";
-    String btnAddCart = "id=add-to-cart";
+    String btnAddCart = "//button[@data-test='add-to-cart']";
+    String btnBackProducts = "#back-to-products";
 
     public String nameProductDetail(String name){
         String productName = page.locator(titleProductDatail).textContent();
@@ -21,4 +22,10 @@ public class ProductDetailPage {
     public void selectBtnAddToCart(){
         page.locator(btnAddCart).click();
     }
+
+    public void selectBtnBackProducts(){
+        page.locator(btnBackProducts).click();
+    }
+
+
 }

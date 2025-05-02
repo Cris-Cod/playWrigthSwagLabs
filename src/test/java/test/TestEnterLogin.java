@@ -9,6 +9,8 @@ import pages.ProductDetailPage;
 import pages.ProductsPage;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestEnterLogin extends BaseClass{
 
@@ -137,6 +139,31 @@ public class TestEnterLogin extends BaseClass{
         utilities.takeScreenShot(page,testName,"price product detail");
         String priceProsuct = cartPage.priceOneProduct(priceP);
         Assert.assertEquals(priceProsuct, priceP);
+        utilities.adjuntarCapturasDeCarpeta(testName);
+    }
+
+    @Test
+    public void addSeveralProducts(@Optional("standard_user") String username, @Optional("secret_sauce") String password, Method method){
+        loginPage = new LoginPage(page);
+        productsPage = new ProductsPage(page);
+        utilities = new Utilities(page);
+        detailPage = new ProductDetailPage(page);
+        cartPage = new CartPage(page);
+        String testName = method.getName();
+        List<String> productList = Arrays.asList("Sauce Labs Onesie", "Sauce Labs Bike Light", "Sauce Labs Bolt T-Shirt");
+
+        utilities.takeScreenShot(page, testName, "login");
+        loginPage.loginUser(username, password);
+        utilities.takeScreenShot(page, testName, "titleProducts");
+        boolean isloginSucces = productsPage.isTitleVisible();
+        Assert.assertTrue(isloginSucces);
+        utilities.takeScreenShot(page, testName, "SelectProducts");
+        productsPage.selectSeveralProducts(productList);
+        utilities.takeScreenShot(page,testName,"btn cart");
+        productsPage.clickBtnCart();
+        utilities.takeScreenShot(page,testName,"names products detail");
+        List<String> namesProductsCart = cartPage.validateNameProducts(productList);
+        Assert.assertEqualsNoOrder(namesProductsCart, productList);
         utilities.adjuntarCapturasDeCarpeta(testName);
     }
 

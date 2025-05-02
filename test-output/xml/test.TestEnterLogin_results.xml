@@ -4,14 +4,14 @@
            failures="0"
            errors="0"
            skipped="0"
-           time="5,112">
+           time="3,626">
     <properties></properties>
 
 
 
             <testcase
-                name="addProductCart"
-                time="5,112"
+                name="addSeveralProducts"
+                time="3,626"
                 classname="test.TestEnterLogin">
             </testcase>
 </testsuite>

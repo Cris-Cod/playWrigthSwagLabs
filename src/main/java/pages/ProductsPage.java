@@ -6,7 +6,10 @@ import com.microsoft.playwright.Page;
 import java.util.List;
 
 public class ProductsPage {
+
     private Page page = null;
+    ProductDetailPage productDetailPage;
+
 
     public ProductsPage(Page page){
         this.page = page;
@@ -49,4 +52,26 @@ public class ProductsPage {
     public void clickBtnCart(){
         page.locator(btnCart).click();
     }
+
+    public void selectSeveralProducts(List<String> products){
+        productDetailPage = new ProductDetailPage(page);
+        Locator allTitlesProducts = page.locator(listProducts);
+        List<String> titles = allTitlesProducts.allTextContents();
+
+        for (int i = 0; i < titles.size(); i++) {
+            String title = titles.get(i);
+            if(title == null) continue;
+
+            for (String product : products) {
+                if(title.contains(product)){
+                    allTitlesProducts.nth(i).click();
+                    productDetailPage.selectBtnAddToCart();
+                    productDetailPage.selectBtnBackProducts();
+                    break;
+                }
+            }
+        }
+    }
 }
+
+

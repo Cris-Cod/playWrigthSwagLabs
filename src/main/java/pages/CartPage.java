@@ -1,6 +1,10 @@
 package pages;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartPage {
 
@@ -24,5 +28,16 @@ public class CartPage {
         return priceSplit;
     }
 
+    public List<String> validateNameProducts(List<String> nameProducts){
+        Locator names = page.locator(nameProductCart);
+        List<String> allNames = names.allTextContents();
 
+        List<String> namesCart = new ArrayList<>();
+        for (String allName : allNames) {
+            if(nameProducts.contains(allName)){
+                namesCart.add(allName);
+            }
+        }
+        return namesCart;
+    }
 }
