@@ -3,10 +3,7 @@ package test;
 import Utils.Utilities;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import pages.CartPage;
-import pages.LoginPage;
-import pages.ProductDetailPage;
-import pages.ProductsPage;
+import pages.*;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -19,6 +16,9 @@ public class TestEnterLogin extends BaseClass{
     Utilities utilities;
     ProductDetailPage detailPage;
     CartPage cartPage;
+    CheckoutPage checkoutPage;
+    OverviewPage overviewPage;
+    CompletePage completePage;
 
     @BeforeMethod
     public void setUp(@Optional("https://www.saucedemo.com/") String url, @Optional("chrome") String browserName, @Optional("false") String headless){
@@ -164,6 +164,61 @@ public class TestEnterLogin extends BaseClass{
         utilities.takeScreenShot(page,testName,"names products detail");
         List<String> namesProductsCart = cartPage.validateNameProducts(productList);
         Assert.assertEqualsNoOrder(namesProductsCart, productList);
+        utilities.adjuntarCapturasDeCarpeta(testName);
+    }
+    @Test
+    public void buyProducts(@Optional("standard_user") String username, @Optional("secret_sauce") String password, Method method){
+        loginPage = new LoginPage(page);
+        productsPage = new ProductsPage(page);
+        utilities = new Utilities(page);
+        detailPage = new ProductDetailPage(page);
+        cartPage = new CartPage(page);
+        checkoutPage = new CheckoutPage(page);
+        overviewPage = new OverviewPage(page);
+        completePage = new CompletePage(page);
+        String testName = method.getName();
+        List<String> productList = Arrays.asList("Sauce Labs Onesie", "Sauce Labs Bike Light", "Sauce Labs Bolt T-Shirt");
+
+        utilities.takeScreenShot(page, testName, "login");
+        loginPage.loginUser(username, password);
+        utilities.takeScreenShot(page, testName, "titleProducts");
+        boolean isloginSucces = productsPage.isTitleVisible();
+        Assert.assertTrue(isloginSucces);
+        utilities.takeScreenShot(page, testName, "SelectProducts");
+        productsPage.selectSeveralProducts(productList);
+        utilities.takeScreenShot(page,testName,"btn cart");
+        productsPage.clickBtnCart();
+        utilities.takeScreenShot(page,testName,"names products detail");
+        List<String> namesProductsCart = cartPage.validateNameProducts(productList);
+        Assert.assertEqualsNoOrder(namesProductsCart, productList);
+        utilities.takeScreenShot(page,testName,"click button checkout");
+        cartPage.clickBtnCheckout();
+        utilities.takeScreenShot(page,testName,"title checkout");
+        String titleCheckout = checkoutPage.setTextTitle();
+        Assert.assertEquals(titleCheckout, "Checkout: Your Information");
+        utilities.takeScreenShot(page,testName,"form checkout");
+        checkoutPage.setForm("Rust", "Uki","1235");
+        utilities.takeScreenShot(page,testName,"title overview");
+        String titleOverView = overviewPage.setTextTile();
+        Assert.assertEquals(titleOverView, "Checkout: Overview");
+        utilities.takeScreenShot(page,testName,"text  shipping");
+        String textShipping = overviewPage.setShipping();
+        Assert.assertEquals(textShipping, "Free Pony Express Delivery!");
+        utilities.takeScreenShot(page,testName,"text  total");
+        String textTotal = overviewPage.setTotal();
+        Assert.assertEquals(textTotal, "Total: $36.69");
+        utilities.takeScreenShot(page,testName,"button  finish");
+        overviewPage.setBtnFinish();
+        utilities.takeScreenShot(page,testName,"title complete");
+        String titleComplete = completePage.setTitlePage();
+        Assert.assertEquals(titleComplete, "Checkout: Complete!");
+        utilities.takeScreenShot(page,testName,"text purchase complete");
+        String textThankYou = completePage.setTextThankYou();
+        Assert.assertEquals(textThankYou, "Thank you for your order!");
+        completePage.setBtnBackHome();
+        utilities.takeScreenShot(page, testName, "titleProducts back purchase");
+        boolean isloginSuccesBack = productsPage.isTitleVisible();
+        Assert.assertTrue(isloginSuccesBack);
         utilities.adjuntarCapturasDeCarpeta(testName);
     }
 

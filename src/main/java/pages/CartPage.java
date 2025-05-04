@@ -16,6 +16,7 @@ public class CartPage {
 
     String nameProductCart = "//div[@data-test='inventory-item-name']";
     String priceProduct = "//div[@data-test='inventory-item-price']";
+    String bntCheckout = "#checkout";
 
     public String nameOneProduct(String nProduct){
         String cartTitleP = page.locator(nameProductCart).textContent();
@@ -39,5 +40,9 @@ public class CartPage {
             }
         }
         return namesCart;
+    }
+
+    public void clickBtnCheckout(){
+        page.locator(bntCheckout).click();
     }
 }
